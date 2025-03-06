@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,3 +28,10 @@ Route::post('/kategori/store', [KategoriController::class, 'store']);
 Route::get('/kategori/{id}/edit',[KategoriController::class,'edit'])->name("kategori.edit");
 Route::post("kategori/update",[KategoriController::class,'update']);
 Route::get('/kategori/{id}/delete',[KategoriController::class,'delete']);
+
+Route::get('/wallet', [WalletController::class, 'list']);
+Route::get('/wallet/add', [WalletController::class, 'add']);
+Route::post('/wallet/store', [WalletController::class, 'store']);
+Route::get('/wallet/{id}/edit',[WalletController::class,'edit'])->name("wallet.edit");
+Route::post("wallet/update",[WalletController::class,'update']);
+Route::get('/wallet/{id}/delete',[WalletController::class,'delete']);
