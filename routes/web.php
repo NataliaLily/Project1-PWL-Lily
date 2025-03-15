@@ -4,7 +4,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController; // Add this line to import WalletController
+use App\Mail\TestingMail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+
+
+Route::get('/coba/email', function(){
+    Mail::to('lily@ukrim.ac.id')
+    ->send(new TestingMail());
+ });
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,6 +45,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet/{id}/delete', [WalletController::class, 'delete']);
 });
 
-#Route untuk Authentication
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'verifyLogin']);
+#Route untuk Authentications
+Route::middleware('guest')->group(function () {
+
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'verifyLogin']);
+    Route::get('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'prosesRegister']);
+    Route::get('/register/verify/{email}/{token}', [AuthController::class, 'registerVerify']);
+
+});
+
