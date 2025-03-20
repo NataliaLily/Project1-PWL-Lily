@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Database\Seeder;
 
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -35,3 +36,8 @@ class DatabaseSeeder extends Seeder
         //php artisan db:seed
     }
 }
+
+/*
+ * email : admin1@gmail.com
+ * password : 123456
+ */

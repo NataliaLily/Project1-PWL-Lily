@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController; // Add this line to import WalletController
@@ -22,6 +23,8 @@ Route::get('/test', function () {
     return view('testing');
 });
 Route::middleware('auth')->group(function () {
+    #dashboard 
+    Route::get('/dashboard',[HomeController::class, 'index']);
 
     Route::get('/user', [UserController::class, 'list']);
     Route::get('/user/add', [UserController::class, 'add']);
@@ -43,6 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet/{id}/edit', [WalletController::class, 'edit'])->name("wallet.edit");
     Route::post("wallet/update", [WalletController::class, 'update']);
     Route::get('/wallet/{id}/delete', [WalletController::class, 'delete']);
+
+    
+
 });
 
 #Route untuk Authentications
