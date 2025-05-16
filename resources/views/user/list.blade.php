@@ -26,7 +26,7 @@
                                 <tr>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>------------------</td>
+                                    <td>{{ $user->password }}</td>
                                     <td>
                                         <a href="{{ route('user.edit', [$user->id]) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>

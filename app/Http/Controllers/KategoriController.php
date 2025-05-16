@@ -20,19 +20,15 @@ class KategoriController extends Controller
     }
 
     public function store(Request $request)
-    {
-        #validasi input di bagian server
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required|string'
-        ]);
-        #sudah pasti valid datanya
-        $kategori = new Kategori();
-        $kategori->code = $request->code;
-        $kategori->name = $request->name;
-        $kategori->save();
-        return redirect('/kategori');
-    }
+        {
+            $kategori= new Kategori();
+            $kategori->code = $request->code;
+            $kategori->name = $request->name;
+            $kategori->user_id = auth()->id(); // Dapatkan user_id dari user yang sedang login
+            $kategori->save();
+        
+            return redirect('/kategori');
+        }
 
 
     public function edit($id)

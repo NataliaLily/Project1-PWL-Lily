@@ -21,16 +21,12 @@ class WalletController extends Controller
 
     public function store(Request $request)
     {
-        #validasi input di bagian server
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required|string'
-        ]);
-        #sudah pasti valid datanya
         $wallet = new Wallet();
         $wallet->code = $request->code;
         $wallet->name = $request->name;
+        $wallet->user_id = auth()->id(); // Dapatkan user_id dari user yang sedang login
         $wallet->save();
+    
         return redirect('/wallet');
     }
 

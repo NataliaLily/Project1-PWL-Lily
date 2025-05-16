@@ -3,9 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController; // Add this line to import WalletController
 use App\Mail\TestingMail;
+use App\Models\Transaksi;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
@@ -21,6 +23,7 @@ Route::get('/', function () {
 
 Route::get('/test', function () {
     return view('testing');
+
 });
 Route::middleware('auth')->group(function () {
     #dashboard 
@@ -47,7 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::post("wallet/update", [WalletController::class, 'update']);
     Route::get('/wallet/{id}/delete', [WalletController::class, 'delete']);
 
-    
+   
+    Route::get('/transaksi', [TransaksiController::class, 'list']);
+    Route::get("/transaksi/add", [TransaksiController::class, 'add']);
+    Route::post('/transaksi/store', [TransaksiController::class, 'store']);
+
 
 });
 
