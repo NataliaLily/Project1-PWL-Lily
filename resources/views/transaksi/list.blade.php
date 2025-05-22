@@ -28,14 +28,17 @@
                         <tbody>
                             @php($i = 1)
                             @foreach ($transaksi as $t)
-                                <tr>
+                            {{-- ternary if --}}
+                                {{-- <tr class="{{$t->in_out==='in'?'bg-success' : 'bg-danger'}}"> --}}
+                                    <tr class="{{$t->background_row}}">
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $t->tanggal }}</td>
                                     <td>{{ $t->deskripsi }}</td>
                                     <td>{{ $t->in_out }}</td>
                                     <td>{{ $t->Wallet->name }}</td>
                                     <td>{{ $t->Kategori->name }}</td>
-                                    <td>{{ $t->nominal }}</td>
+                                    <td class="text-right">{{ number_format(
+                                        $t->nominal,0,',',".") }}</td>
                                     <td>
                                         @if($t->dokumen== null)
                                         Tidak ada dokumen
