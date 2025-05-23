@@ -324,7 +324,12 @@ return [
             'text' => "Transaksi",
             'url' => "/transaksi",
             'icon' => 'nav-icon fas fa-cash-register'
-        ]
+        ],
+        [
+            'text' => "Transfer",
+            'url' => "/transfer",
+            'icon' => 'nav-icon fas fa-credit-card'
+        ],
     ],
 
     /*

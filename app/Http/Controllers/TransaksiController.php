@@ -74,7 +74,11 @@ class TransaksiController extends Controller
             $jurnal->reference_table = $transaksi->getTable();
             $jurnal->reference_id = $transaksi->id;
             $jurnal->wallet_id = $transaksi->wallet_id;
+
             $jurnal->nominal = $transaksi->nominal;
+            if($transaksi->in_out === "out"){
+                $jurnal->nominal =(int)$transaksi->nominal * -1;
+            }
             $jurnal->in_out = $transaksi->in_out;
             $jurnal->deskripsi = $transaksi->deskripsi;
             $jurnal->tanggal = $transaksi->tanggal;

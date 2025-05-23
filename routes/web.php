@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController; // Add this line to import WalletController
 use App\Mail\TestingMail;
@@ -55,7 +56,12 @@ Route::middleware('auth')->group(function () {
     Route::get("/transaksi/add", [TransaksiController::class, 'add']);
     Route::post('/transaksi/store', [TransaksiController::class, 'store']);
 
-
+    #menu transfer
+    Route::prefix("/transfer")->group(function () {
+        Route::get("/", [TransferController::class, 'list']);
+        Route::get("/add", [TransferController::class, 'add']);
+        Route::post("/store", [TransferController::class, 'store']);
+    });
 });
 
 #Route untuk Authentications

@@ -18,6 +18,7 @@
                             <tr>
                                 <th>Kode</th>
                                 <th>Nama</th>
+                                <th>Saldo</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -26,6 +27,7 @@
                                 <tr>
                                     <td>{{ $wallet->code }}</td>
                                     <td>{{ $wallet->name }}</td>
+                                    <td>{{ $wallet->saldo }}</td>
                                     <td>
                                         <a href="{{ route('wallet.edit', [$wallet->id]) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
@@ -55,7 +57,7 @@
                 let code = $(this).data('code');
                 Swal.fire({
                     title: "Anda Yakin?",
-                    text: `Anda akan menghapus wallet dengan nama ${name}`,
+                    text: `Anda awn menghapus wallet dengan nama ${name}`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",

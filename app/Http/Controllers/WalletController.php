@@ -8,10 +8,14 @@ class WalletController extends Controller
 {
     public function list()
     {
-        $wallet = Wallet::all();
+        // $wallet = Wallet::all();
+        // return view('wallet/list', [
+        //     'wallet' => $wallet
+        // ]);
+
+        $wallet = Wallet::where('user_id', \Auth::id())->get();
         return view('wallet/list', [
-            'wallet' => $wallet
-        ]);
+            'wallet' => $wallet]);
     }
 
     public function add()

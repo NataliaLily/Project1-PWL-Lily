@@ -12,6 +12,23 @@ class Wallet extends Model
     protected $fillable = [
         'code',
         'name',
+
+
     ];
+    protected $appends = [ 'saldo' ];
+
+    protected $with = ['Jurnal'];
+        
+    public function getSaldoAttribute()
+    {
+        $saldo = $this->Jurnal()
+            ->where('wallet_id', $this->id)
+            ->sum('nominal');
+        return $saldo;
+    }
+
+    public function Jurnal(){
+        return $this->hasMany(Jurnal::class);
+    }
 }
 
