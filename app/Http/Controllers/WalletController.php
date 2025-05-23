@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Wallet;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
@@ -15,7 +18,8 @@ class WalletController extends Controller
 
         $wallet = Wallet::where('user_id', \Auth::id())->get();
         return view('wallet/list', [
-            'wallet' => $wallet]);
+            'wallet' => $wallet
+        ]);
     }
 
     public function add()
@@ -30,7 +34,7 @@ class WalletController extends Controller
         $wallet->name = $request->name;
         $wallet->user_id = auth()->id(); // Dapatkan user_id dari user yang sedang login
         $wallet->save();
-    
+
         return redirect('/wallet');
     }
 
@@ -61,7 +65,7 @@ class WalletController extends Controller
         #user ada
         $wallet->code = $request->code;
         $wallet->name = $request->name;
-    
+
         $wallet->save();
         return redirect('/wallet');
     }
@@ -76,5 +80,22 @@ class WalletController extends Controller
         #kondini dimana data usernya ada
         $wallet->delete();
         return redirect('/wallet');
+    }
+
+    public function reportPDF($id)
+    {
+        $wallet = Wallet::query()
+            ->where('user_id', Auth::id())
+            ->where('id', $id)
+            ->first();
+        if ($wallet == null) {
+            abort(403);
+        }
+        $pdf = Pdf::loadView('wallet/report-pdf', [
+            'wallet' => $wallet
+        ]);
+        return $pdf->stream();
+
+
     }
 }

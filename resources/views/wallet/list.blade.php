@@ -19,6 +19,7 @@
                                 <th>Kode</th>
                                 <th>Nama</th>
                                 <th>Saldo</th>
+                                <th>Report</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -28,6 +29,11 @@
                                     <td>{{ $wallet->code }}</td>
                                     <td>{{ $wallet->name }}</td>
                                     <td>{{ $wallet->saldo }}</td>
+                                    <td>
+                                        <a href="/wallet/{{$wallet->id}}/reportPDF" class="btn btn-danger">
+                                            <i class="fa fa-file-pdf"></i>
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="{{ route('wallet.edit', [$wallet->id]) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>

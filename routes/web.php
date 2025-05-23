@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet/{id}/edit', [WalletController::class, 'edit'])->name("wallet.edit");
     Route::post("wallet/update", [WalletController::class, 'update']);
     Route::get('/wallet/{id}/delete', [WalletController::class, 'delete']);
+    #impor pdf 
+    Route::get('/wallet/{id}/reportPDF', [WalletController::class, 'reportPDF']);
 
    
     Route::get('/transaksi', [TransaksiController::class, 'list']);
