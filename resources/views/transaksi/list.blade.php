@@ -55,6 +55,7 @@
                     </table>
                 </div>
             </div>
+            {!! $transaksi->links('pagination::bootstrap-5') !!}
         </div>
     </div>
 @stop

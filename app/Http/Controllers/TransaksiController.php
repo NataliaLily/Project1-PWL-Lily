@@ -19,7 +19,7 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::query()
             ->with(['Wallet', 'Kategori'])
             ->where('user_id', '=', Auth::user()->id)
-            ->get();
+            ->paginate(10);
 
         return view('transaksi.list', [
             'transaksi' => $transaksi
