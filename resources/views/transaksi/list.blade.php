@@ -10,8 +10,41 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <div class="card-header">
+                    <a href="/transaksi/add" class="btn btn-primary float-right ">Tambah</a>
+                </div>
+                {{-- membuat filter untuk transaksi --}}
                 <div class="card-body">
-                    <a href="/transaksi/add" class="btn btn-primary">Tambah</a>
+                    <div class="col-12">
+                        <form>
+                            <select name="in_out" id="" class="form-control-sm">
+                                <option value="">Semua Tipe</option>
+                                <option value="in" {{request()->in_out == "in" ? "selected" : ""}}>Uang Masuk</option>
+                                <option value="out" {{request()->in_out == "out" ? "selected" : ""}}>Uang Keluar</option>
+                            </select>
+                            <select name="wallet_id" id="" class="form-control-sm">
+                                <option value="">Semua Wallet</option>
+                                @foreach ($wallet as $w)
+                                    <option value="{{ $w->id }}" 
+                                        {{$w->id == request()
+                                        ->wallet_id ? "selected" : ""}}>{{ $w->name }}</option>
+                                @endforeach
+                            </select>
+                            <select name="kategori_id" id="" class="form-control-sm">
+                                <option value="">Semua Kategori</option>
+                                @foreach ($kategori as $k)
+                                    <option value="{{ $k->id }}" 
+                                        {{$k->id == request() 
+                                        ->kategori_id ? "selected" : ""}}>{{ $k->name }}</option>
+                                @endforeach
+                            </select>
+                            <input type="date" value="{{request()->tanggal}}" name = "tanggal" class="form-control-sm">
+                            <button type="submit" class="btn btn-sm btn-info">Filter</button>
+                            <a href="/transaksi" class="btn btn-sm btn-dark">Reset</a>
+                            {{-- export excel --}}
+                            <input type="submit" name="excel" class="btn btn-sm btn-success" value="Excel">
+                        </form>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -28,25 +61,26 @@
                         <tbody>
                             @php($i = 1)
                             @foreach ($transaksi as $t)
-                            {{-- ternary if --}}
+                                {{-- ternary if --}}
                                 {{-- <tr class="{{$t->in_out==='in'?'bg-success' : 'bg-danger'}}"> --}}
-                                    <tr class="{{$t->background_row}}">
+                                <tr class="{{ $t->background_row }}">
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $t->tanggal }}</td>
                                     <td>{{ $t->deskripsi }}</td>
                                     <td>{{ $t->in_out }}</td>
                                     <td>{{ $t->Wallet->name }}</td>
                                     <td>{{ $t->Kategori->name }}</td>
-                                    <td class="text-right">{{ number_format(
-                                        $t->nominal,0,',',".") }}</td>
+                                    <td class="text-right">
+                                        {{ number_format($t->nominal, 0, ',', '.') }}
+                                    </td>
                                     <td>
-                                        @if($t->dokumen== null)
-                                        Tidak ada dokumen
+                                        @if ($t->dokumen == null)
+                                            Tidak ada dokumen
                                         @else
-                                        <a target="_blank"
-                                        href="{{asset("storage/uploads/".$t->dokumen)}}" class="btn btn-info">
-                                            Lihat File
-                                        </a>
+                                            <a target="_blank" href="{{ asset('storage/uploads/' . $t->dokumen) }}"
+                                                class="btn btn-info">
+                                                Lihat File
+                                            </a>
                                         @endif
                                     </td>
                                 </tr>
@@ -55,6 +89,7 @@
                     </table>
                 </div>
             </div>
+            {{-- pagination --}}
             {!! $transaksi->links('pagination::bootstrap-5') !!}
         </div>
     </div>

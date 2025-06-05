@@ -2,29 +2,79 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransaksiExport;
 use App\Models\Jurnal;
 use App\Models\Kategori;
 use App\Models\Transaksi;
 use App\Models\Wallet;
+use Auth;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Maatwebsite\Excel\Facades\Excel;
 use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Facades\Auth;
+
+
 // use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
     public function list(Request $request)
     {
+        #export excel
+        if ($request->excel != null) {
+            return $this->exportExcel($request);
+        }
+
         $transaksi = Transaksi::query()
             ->with(['Wallet', 'Kategori'])
             ->where('user_id', '=', Auth::user()->id)
-            ->paginate(10);
+            #untuk filter
+            ->when($request->in_out, function ($q) use ($request) {
+                $q->where('in_out', $request->in_out);
+            })
+            ->when($request->wallet_id, function ($q) use ($request) {
+                $q->where('wallet_id', $request->wallet_id);
+            })
+            ->when($request->kategori_id, function ($q) use ($request) {
+                $q->where('kategori_id', $request->kategori_id);
+            })
+            ->when($request->tanggal, function ($q) use ($request) {
+                $q->whereDate('tanggal', $request->tanggal);
+            })
+            ->paginate(10); #untuk pagination per data = 10
 
+        #mengambil data wallet dan kategori (untuk mencari data wallet dan kategori sesuai tanggal / filter)
+        $wallet = Wallet::query()->where("user_id", "=", Auth::id())->get();
+        $kategori = Kategori::query()->where("user_id", "=", Auth::id())->get();
         return view('transaksi.list', [
-            'transaksi' => $transaksi
+            'transaksi' => $transaksi,
+            'wallet' => $wallet,
+            'kategori' => $kategori
         ]);
     }
+
+    private function exportExcel($request)
+    {
+        $transaksi = Transaksi::query()
+            ->with(['Wallet', 'Kategori'])
+            ->where('user_id', '=', Auth::user()->id)
+            ->when($request->in_out, function ($q) use ($request) {
+                $q->where("in_out", $request->in_out);
+            })
+            ->when($request->wallet_id, function ($q) use ($request) {
+                $q->where("wallet_id", $request->wallet_id);
+            })
+            ->when($request->kategori_id, function ($q) use ($request) {
+                $q->where("kategori_id", $request->kategori_id);
+            })
+            ->when($request->tanggal, function ($q) use ($request) {
+                $q->where("tanggal", $request->tanggal);
+            })
+            ->get();
+        return Excel::download(new TransaksiExport($transaksi, $request), 'transaksi.xlsx');
+    }
+
 
 
     public function add()
@@ -76,8 +126,8 @@ class TransaksiController extends Controller
             $jurnal->wallet_id = $transaksi->wallet_id;
 
             $jurnal->nominal = $transaksi->nominal;
-            if($transaksi->in_out === "out"){
-                $jurnal->nominal =(int)$transaksi->nominal * -1;
+            if ($transaksi->in_out === "out") {
+                $jurnal->nominal = (int)$transaksi->nominal * -1;
             }
             $jurnal->in_out = $transaksi->in_out;
             $jurnal->deskripsi = $transaksi->deskripsi;
@@ -90,7 +140,7 @@ class TransaksiController extends Controller
         } catch (Exception $e) {
             #kondisi jika ada error ->batallkan semua proses query db
             \DB::rollBack();
-            return redirect("/transaksi")->with('error', 'Transaksi gagal ditambahkan : ' .$e->getMessage());
+            return redirect("/transaksi")->with('error', 'Transaksi gagal ditambahkan : ' . $e->getMessage());
         }
     }
 }
