@@ -29,13 +29,16 @@ Route::get('/test', function () {
 Route::middleware('auth')->group(function () {
     #dashboard 
     Route::get('/dashboard',[HomeController::class, 'index']);
+    
+  Route::prefix("/user")->middleware('pwl.admin')->group(function (): void {
+        Route::get('/', [UserController::class, 'list']);
+        Route::get('/add', [UserController::class, 'add']);
+        Route::post('/store', [UserController::class, 'store']);
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name("user.edit");
+        Route::post("/update", [UserController::class, 'update']);
+        Route::get('/{id}/delete', [UserController::class, 'delete']);
+    });
 
-    Route::get('/user', [UserController::class, 'list']);
-    Route::get('/user/add', [UserController::class, 'add']);
-    Route::post('/user/store', [UserController::class, 'store']);
-    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name("user.edit");
-    Route::post("user/update", [UserController::class, 'update']);
-    Route::get('/user/{id}/delete', [UserController::class, 'delete']);
 
     Route::get('/kategori', [KategoriController::class, 'list']);
     Route::get('/kategori/add', [KategoriController::class, 'add']);

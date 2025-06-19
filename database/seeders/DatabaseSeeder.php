@@ -63,11 +63,12 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // DB::table('users')->insert([
-        //     'name' => 'Joko',
-        //     'email' => 'joko@gmail.com',
-        //     'password' => password_hash('12345678',PASSWORD_DEFAULT)
-        // ]);
+        DB::table('users')->insert([
+            'name' => 'Joko',
+            'email' => 'joko@gmail.com',
+            'password' => password_hash('12345678',PASSWORD_DEFAULT),
+            'role' => 'admin',
+        ]);
 
         // password
         // email : admin1@gmail
